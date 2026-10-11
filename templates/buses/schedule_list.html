@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Schedules{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">
+            Bus Schedules
+        </h2>
+        <div class="d-flex gap-2">
+            <a href="{% url 'schedule_add' %}" class="btn btn-danger">
+                + Add Schedule
+            </a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>Bus</th>
+                            <th>Route</th>
+                            <th>Date</th>
+                            <th>Departure</th>
+                            <th>Arrival</th>
+                            <th>Boarding</th>
+                            <th>Dropping</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for schedule in schedules %}
+                        <tr>
+                            <td>
+                                {{ schedule.bus.bus_name }}
+                            </td>
+                            <td>
+                                {{ schedule.route.source }}
+                                →
+                                {{ schedule.route.destination }}
+                            </td>
+                            <td>
+                                {{ schedule.journey_date }}
+                            </td>
+                            <td>
+                                {{ schedule.departure_time }}
+                            </td>
+                            <td>
+                                {{ schedule.arrival_time }}
+                            </td>
+                            <td>
+                                {{ schedule.boarding_point }}
+                            </td>
+                            <td>
+                                {{ schedule.dropping_point }}
+                            </td>
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                No schedules found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

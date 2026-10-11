@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - RedBus Clone{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="bg-danger text-white py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">Book Your Bus Ticket</h1>
+            <p class="lead">
+                Search and book buses easily and securely.
+            </p>
+        </div>
+        <!-- Search Card -->
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-4">
+                <form method="GET" action="{% url 'search_buses' %}">
+                    <div class="row g-3 align-items-end">
+                        <!-- From -->
+                        <div class="col-md-4">
+                            <label class="form-label text-dark fw-bold">
+                                From
+                            </label>
+                            <input type="text" name="source" class="form-control form-control-lg"
+                                placeholder="Enter source" required>
+                        </div>
+                        <!-- To -->
+                        <div class="col-md-4">
+                            <label class="form-label text-dark fw-bold">
+                                To
+                            </label>
+                            <input type="text" name="destination" class="form-control form-control-lg"
+                                placeholder="Enter destination" required>
+                        </div>
+                        <!-- Date -->
+                        <div class="col-md-3">
+                            <label class="form-label text-dark fw-bold">
+                                Journey Date
+                            </label>
+
+                            <input type="date" name="journey_date" class="form-control form-control-lg" required>
+                        </div>
+
+                        <!-- Search -->
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-danger btn-lg w-100">
+                                🔍
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Features -->
+<div class="container py-5">
+
+    <div class="row g-4 text-center">
+
+        <!-- Easy Bus Search -->
+        <div class="col-md-4">
+            <a href="{% url 'home' %}" class="text-decoration-none text-dark">
+                <div class="card shadow-sm border-0 h-100 text-center p-4">
+                    <div class="fs-1">🚌</div>
+                    <h5 class="fw-bold mt-3">
+                        Easy Bus Search
+                    </h5>
+                    <p class="text-muted">
+                        Search buses by source, destination and journey date.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Choose Your Seat -->
+        <div class="col-md-4">
+            <a href="{% url 'home' %}" class="text-decoration-none text-dark">
+                <div class="card shadow-sm border-0 h-100 text-center p-4">
+                    <div class="fs-1">💺</div>
+                    <h5 class="fw-bold mt-3">Choose Your Seat</h5>
+                    <p class="text-muted">
+                        Select your preferred available seat during booking.
+                    </p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Get Your Ticket -->
+        <div class="col-md-4">
+            <a href="{% url 'my_booking' %}" class="text-decoration-none text-dark">
+                <div class="card shadow-sm border-0 h-100 text-center p-4">
+                    <div class="fs-1">🎫</div>
+                    <h5 class="fw-bold mt-3">Get Your Ticket</h5>
+                    <p class="text-muted">
+                        Complete your booking and download your ticket.
+                    </p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

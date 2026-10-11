@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}My Buses{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">My Buses</h2>
+        <div class="d-flex gap-2">
+        <a href="{% url 'add_bus' %}" class="btn btn-danger">
+            + Add Bus
+        </a>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+    </div>
+
+    {% if buses %}
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>Bus Number</th>
+                            <th>Bus Name</th>
+                            <th>Type</th>
+                            <th>Seats</th>
+                            <th>Fare</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for bus in buses %}
+                        <tr>
+                            <td>{{ bus.bus_number }}</td>
+
+                            <td>{{ bus.bus_name }}</td>
+                            <td>
+                                {{ bus.get_bus_type_display }}
+                            </td>
+                            <td>{{ bus.total_seats }}</td>
+                            <td>₹{{ bus.fare }}</td>
+                            <td>
+                                {% if bus.is_active %}
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+                                {% else %}
+                                <span class="badge bg-secondary">
+                                    Inactive
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'bus_update' bus.id %}" class="btn btn-sm btn-primary">
+                                    Edit
+                                </a>
+                                <a href="{% url 'bus_delete' bus.id %}" class="btn btn-sm btn-danger">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="alert alert-info">
+        You have not added any buses yet.
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

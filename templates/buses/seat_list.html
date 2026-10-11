@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}Bus Seats{% endblock %}
+
+{% block content %}
+
+<style>
+    .bus-card {
+        border: 1px solid #e5eaf0;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, .07);
+        height: 100%;
+        background: white;
+    }
+    .bus-info {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    .seat-section {
+        padding: 20px;
+    }
+    .seat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 9px;
+    }
+    .seat {
+        padding: 10px 2px;
+        text-align: center;
+        border-radius: 7px;
+        font-weight: 600;
+        font-size: 13px;
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+    .seat.sleeper {
+        background: #e0e7ff;
+        color: #3730a3;
+        border-color: #c7d2fe;
+    }
+    .seat.booked {
+        background: #f76161;
+        color: #991b1b;
+        border-color: #f07272;
+    }
+    .seat.unavailable {
+        background: #e2e8f0;
+        color: #475569;
+        border-color: #cbd5e1;
+    }
+    .seat-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 12px;
+        margin-top: 20px;
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .legend-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        display: inline-block;
+        border: 1px solid #999;
+    }
+    @media (max-width: 576px) {
+        .seat-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+</style>
+
+<div class="container-fluid px-4 py-4">
+    <!-- Heading and Buttons -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <h2 class="fw-bold mb-0">🚌 Bus Seats</h2>
+        <div class="d-flex gap-2">
+            <a href="{% url 'seat_add' %}" class="btn btn-danger">
+                + Add Seat
+            </a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- One card per bus -->
+    <div class="row g-4">
+        {% regroup seats by bus as bus_groups %}
+
+        {% for group in bus_groups %}
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="bus-card">
+                <!-- Bus Information -->
+                <div class="bus-info">
+                    <h5 class="fw-bold mb-2">
+                        {{ group.grouper.bus_name }}
+                    </h5>
+                    <p class="text-muted mb-1">
+                        🚌 Bus Number:
+                        {{ group.grouper.bus_number }}
+                    </p>
+                    <p class="text-muted mb-1">
+                        👤 <strong>Username:</strong> {{ group.grouper.operator.username }}
+                    </p>
+                    <p class="mb-0">
+                        👤 <strong>User ID:</strong> {{ group.grouper.operator.id }}
+                    </p>
+                    <hr>
+
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <small class="text-muted">Total Seats</small>
+                            <div class="fw-bold">{{ group.list|length }}</div>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted">Type</small>
+                            <div class="fw-bold">
+                                {{ group.grouper.get_bus_type_display }}
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted">Fare</small>
+                            <div class="fw-bold">
+                                ₹{{ group.grouper.fare }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Seats -->
+                <div class="seat-section">
+                    <h5 class="fw-bold mb-3">Seat Layout</h5>
+                    <div class="seat-grid">
+                        {% for seat in group.list %}
+                        <div class="seat
+                            {% if not seat.is_active %}
+                                unavailable
+                            {% elif seat.id in booked_seat_ids %}
+                                booked
+                            {% elif seat.seat_type == 'SLEEPER' %}
+                                sleeper
+                            {% endif %}">
+                            {{ seat.seat_number }}
+                        </div>
+                        {% empty %}
+                        <p>No seats available.</p>
+                        {% endfor %}
+
+                    </div>
+                    <hr class="mt-4">
+                    <div class="seat-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background:#6366f1"></span>
+                            Sleeper
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background:#22c55e"></span>
+                            Available
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background:#ef4444"></span>
+                            Booked
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background:#64748b"></span>
+                            Unavailable
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">No bus seats found.</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Buses{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="fw-bold mb-2">
+        Available Buses
+    </h2>
+
+    <p class="text-muted">
+        {{ source }} → {{ destination }}
+        | {{ journey_date }}
+    </p>
+
+    {% if schedules %}
+
+    {% for schedule in schedules %}
+
+    <div class="card shadow-sm border-0 mb-3">
+
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <h5 class="fw-bold">
+                        {{ schedule.bus.bus_name }}
+                    </h5>
+                    <span class="badge bg-secondary">
+                        {{ schedule.bus.get_bus_type_display }}
+                    </span>
+                    <p class="mb-0 mt-2 text-muted">
+                        {{ schedule.bus.bus_number }}
+                    </p>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>
+                        {{ schedule.departure_time }}
+                    </strong>
+                    <p class="text-muted mb-0">
+                        {{ schedule.boarding_point }}
+                    </p>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>
+                        {{ schedule.arrival_time }}
+                    </strong>
+                    <p class="text-muted mb-0">
+                        {{ schedule.dropping_point }}
+                    </p>
+                </div>
+
+                <div class="col-md-2">
+                    <h5 class="text-danger">
+                        ₹{{ schedule.bus.fare }}
+                    </h5>
+                    <small>
+                        {{ schedule.bus.total_seats }} seats
+                    </small>
+                </div>
+
+                <div class="col-md-1">
+                    <a href="{% url 'seat_select' schedule.id %}" class="btn btn-danger btn-sm">
+                        Select
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+    
+    {% else %}
+
+    <div class="alert alert-warning">
+        No buses found for this route and date.
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

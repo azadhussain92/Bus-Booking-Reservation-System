@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Bus Ticket{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-danger text-white">
+                    <div class="d-flex justify-content-between">
+                        <h4 class="mb-0">
+                            Bus Ticket
+                        </h4>
+                        <span>
+                            CONFIRMED
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h3 class="text-danger">
+                            {{ ticket.ticket_number }}
+                        </h3>
+                        <p class="text-muted">
+                            Ticket Number
+                        </p>
+                    </div>
+                    <hr>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Booking ID:</strong>
+                                {{ booking.booking_id }}
+                            </p>
+                            <p>
+                                <strong>Bus:</strong>
+                                {{ booking.schedule.bus.bus_name }}
+                            </p>
+                            <p>
+                                <strong>Bus Number:</strong>
+                                {{ booking.schedule.bus.bus_number }}
+                            </p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Journey Date:</strong>
+                                {{ booking.schedule.journey_date }}
+                            </p>
+                            <p>
+                                <strong>Departure:</strong>
+                                {{ booking.schedule.departure_time }}
+                            </p>
+                            <p>
+                                <strong>Arrival:</strong>
+                                {{ booking.schedule.arrival_time }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-light border">
+                        <h5>
+                            Route
+                        </h5>
+                        <h5 class="text-danger">
+                            {{ booking.schedule.route.source }}
+                            →
+                            {{ booking.schedule.route.destination }}
+                        </h5>
+                    </div>
+                    <hr>
+
+                    <h5 class="mb-3">
+                        Passenger Details
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th>Seat</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for passenger in booking.passengers.all %}
+                                <tr>
+                                    <td>
+                                        {{ passenger.seat.seat_number }}
+                                    </td>
+                                    <td>
+                                        {{ passenger.name }}
+                                    </td>
+                                    <td>
+                                        {{ passenger.age }}
+                                    </td>
+                                    <td>
+                                        {{ passenger.get_gender_display }}
+                                    </td>
+                                    <td>
+                                        {{ passenger.phone }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5>
+                                Total Amount
+                            </h5>
+                            <h3 class="text-danger">
+                                ₹{{ booking.total_amount }}
+                            </h3>
+                        </div>
+
+                        <div class="col-md-6 text-md-end">
+                            <a href="{% url 'download_ticket' booking.booking_id %}" class="btn btn-danger">
+                                Download PDF
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <a href="{% url 'my_booking' %}" class="btn btn-secondary">
+                            My Bookings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

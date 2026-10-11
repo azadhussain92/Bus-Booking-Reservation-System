@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}All Bookings{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">📋 All Bookings</h2>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    {% if bookings %}
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Username</th>
+                            <th>Bus</th>
+                            <th>Route</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Booked At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.booking_id }}</td>
+                            <td>{{ booking.user.username }}</td>
+                            <td>{{ booking.schedule.bus }}</td>
+                            <td>{{ booking.schedule.route }}</td>
+                            <td>₹{{ booking.total_amount }}</td>
+                            <td>
+                                {% if booking.status == 'CONFIRMED' %}
+                                <span class="badge bg-success">Confirmed</span>
+                                {% elif booking.status == 'PENDING' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                                {% else %}
+                                <span class="badge bg-secondary">{{ booking.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ booking.booked_at|date:"d-m-Y H:i" }}</td>
+
+                            <td>
+                                {% if booking.status == 'CONFIRMED' %}
+                                <form method="POST" action="{% url 'cancel_booking' booking.booking_id %}"
+                                    onsubmit="return confirm('Are you sure you want to cancel this ticket?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        Cancel Ticket
+                                    </button>
+                                </form>
+                                {% else %}
+                                <span class="text-muted">Not Available</span>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="alert alert-info">
+        No bookings found.
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

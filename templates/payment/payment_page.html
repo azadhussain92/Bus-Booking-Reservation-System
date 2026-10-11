@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        Payment
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="mb-3">
+                        Booking Summary
+                    </h5>
+                    <div class="mb-3">
+                        <p>
+                            <strong>Booking ID:</strong>
+                            {{ booking.booking_id }}
+                        </p>
+                        <p>
+                            <strong>Bus:</strong>
+                            {{ booking.schedule.bus.bus_name }}
+                        </p>
+                        <p>
+                            <strong>Route:</strong>
+                            {{ booking.schedule.route.source }}
+                            →
+                            {{ booking.schedule.route.destination }}
+                        </p>
+                        <p>
+                            <strong>Journey Date:</strong>
+                            {{ booking.schedule.journey_date }}
+                        </p>
+                    </div>
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Total Amount</strong>
+                        <strong class="text-danger">
+                            ₹{{ booking.total_amount }}
+                        </strong>
+                    </div>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Select Payment Method
+                            </label>
+                            {{ form.payment_method }}
+                            {% for error in form.payment_method.errors %}
+                            <div class="text-danger small">
+                                {{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="submit" class="btn btn-danger w-100">
+                            Pay ₹{{ booking.total_amount }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

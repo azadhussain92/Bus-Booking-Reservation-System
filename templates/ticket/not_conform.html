@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Ticket Not Available{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="alert alert-warning text-center">
+        <h4>
+            Ticket Not Available
+        </h4>
+        <p>
+            Your booking must be confirmed before downloading the ticket.
+        </p>
+        <a href="{% url 'booking_detail' booking.booking_id %}" class="btn btn-danger">
+            Back to Booking
+        </a>
+    </div>
+</div>
+
+{% endblock %}

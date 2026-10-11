@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Passenger Details{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        Passenger Details
+                    </h4>
+                </div>
+
+                <div class="card-body">
+                    <!-- Journey Details -->
+                    <div class="alert alert-light border">
+                        <h5 class="mb-3">
+                            {{ schedule.bus.bus_name }}
+                        </h5>
+                        <p class="mb-1">
+                            <strong>Route:</strong>
+                            {{ schedule.route.source }}
+                            →
+                            {{ schedule.route.destination }}
+                        </p>
+                        <p class="mb-1">
+                            <strong>Date:</strong>
+                            {{ schedule.journey_date }}
+                        </p>
+                        <p class="mb-0">
+                            <strong>Departure:</strong>
+                            {{ schedule.departure_time }}
+                        </p>
+                    </div>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+                        {% for seat, form in passenger_forms %}
+
+                        <div class="card mb-4 border">
+                            <div class="card-header">
+                                <strong>
+                                    Passenger {{ forloop.counter }}
+                                </strong>
+                                <span class="badge bg-danger float-end">
+                                    Seat {{ seat.seat_number }}
+                                </span>
+                            </div>
+
+                            <div class="card-body">
+                                <!-- Name -->
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        {{ form.name.label }}
+                                    </label>
+                                    {{ form.name }}
+
+                                    {% for error in form.name.errors %}
+                                    <div class="text-danger small">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <!-- Age -->
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        {{ form.age.label }}
+                                    </label>
+                                    {{ form.age }}
+                                    {% for error in form.age.errors %}
+                                    <div class="text-danger small">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <!-- Gender -->
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        {{ form.gender.label }}
+                                    </label>
+                                    {{ form.gender }}
+
+                                    {% for error in form.gender.errors %}
+                                    <div class="text-danger small">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <!-- Phone -->
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        {{ form.phone.label }}
+                                    </label>
+                                    {{ form.phone }}
+
+                                    {% for error in form.phone.errors %}
+                                    <div class="text-danger small">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                        <!-- Non-field errors -->
+                        {% for seat, form in passenger_forms %}
+
+                        {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'seat_select' schedule.id %}" class="btn btn-secondary">
+                                Back to Seats
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                Continue to Booking
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

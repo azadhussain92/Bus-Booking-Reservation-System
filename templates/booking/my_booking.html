@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="fw-bold mb-4">
+        My Bookings
+    </h2>
+    
+
+    {% if bookings %}
+
+    {% for booking in bookings %}
+
+    <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <small class="text-muted">
+                        Booking ID
+                    </small>
+                    <h6>
+                        {{ booking.booking_id }}
+                    </h6>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>
+                        {{ booking.schedule.bus.bus_name }}
+                    </strong>
+                    <p class="mb-0 text-muted">
+                        {{ booking.schedule.bus.bus_number }}
+                    </p>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>
+                        {{ booking.schedule.route.source }}
+                        →
+                        {{ booking.schedule.route.destination }}
+                    </strong>
+                    <p class="mb-0 text-muted">
+                        {{ booking.schedule.journey_date }}
+                    </p>
+                </div>
+
+                <div class="col-md-2">
+                    ₹{{ booking.total_amount }}
+                    <br>
+                    {% if booking.status == 'CONFIRMED' %}
+                    <span class="badge bg-success">
+                        Confirmed
+                    </span>
+                    {% elif booking.status == 'PENDING' %}
+                    <span class="badge bg-warning text-dark">
+                        Pending
+                    </span>
+                    {% else %}
+                    <span class="badge bg-danger">
+                        Cancelled
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-2">
+                    <div class="d-flex gap-2 flex-wrap">
+
+                        <a href="{% url 'booking_detail' booking.id %}" class="btn btn-primary btn-sm">
+                            View Ticket
+                        </a>
+
+                        {% if booking.status == 'CONFIRMED' %}
+                        <form method="POST" action="{% url 'cancel_booking' booking.booking_id %}"
+                            onsubmit="return confirm('Are you sure you want to cancel this ticket?');">
+
+                            {% csrf_token %}
+
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Cancel
+                            </button>
+                        </form>
+
+                        {% elif booking.status == 'CANCELLED' %}
+                        <span class="badge bg-secondary">Cancelled</span>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+    {% else %}
+
+    <div class="alert alert-info">
+        You don't have any bookings yet.
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

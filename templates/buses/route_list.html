@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Routes{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Bus Routes</h2>
+        <div class="d-flex gap-2">
+            <a href="{% url 'route_add' %}" class="btn btn-danger">
+                + Add Route
+            </a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Distance</th>
+                            <th>Duration</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for route in routes %}
+                        <tr>
+                            <td>{{ route.source }}</td>
+                            <td>{{ route.destination }}</td>
+                            <td>{{ route.distance }} KM</td>
+                            <td>{{ route.duration }}</td>
+                            <td>
+                                <a href="{% url 'route_update' route.id %}" class="btn btn-sm btn-primary">
+                                    Edit
+                                </a>
+                                <a href="{% url 'route_delete' route.id %}" class="btn btn-sm btn-danger">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                No routes available.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
