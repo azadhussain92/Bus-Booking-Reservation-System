@@ -7,69 +7,108 @@ Bus Operator Dashboard
 {% block content %}
 
 <div class="container py-5">
-
-    <h1 class="fw-bold">Bus Operator Dashboard</h1>
-    <h2 class="mt-3">
-        Welcome, {{ user.first_name }}
-    </h2>
-    <p class="text-muted">
-        Manage your buses, routes and schedules.
-    </p>
-
-    <!-- Operator Summary -->
-    <div class="row g-3 mt-3">
-
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0 p-3 h-100">
-                <h6 class="text-muted">Total Buses</h6>
-                <h3>{{ total_buses }}</h3>
-            </div>
+    <div class="card shadow border-0 p-4 h-100">
+        <div class="mb-4">
+            <h2 class="mt-3 text-nowrap">
+                Welcome To {{ user.first_name }} {{user.last_name}}
+            </h2>
+            <p class="text-muted">
+                Manage your buses, routes and schedules.
+            </p>
         </div>
-
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0 p-3 h-100">
-                <h6 class="text-muted">Total Bookings</h6>
-                <h3>{{ total_bookings }}</h3>
+        <!-- Operator Summary -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card shadow border-0 p-3 h-100">
+                    <h6 class="text-muted">Total Buses</h6>
+                    <h3>{{ total_buses }}</h3>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0 p-3 h-100">
-                <h6 class="text-muted">Successful Payments</h6>
-                <h3>{{ total_payments }}</h3>
+            <div class="col-md-3">
+                <div class="card shadow border-0 p-3 h-100">
+                    <h6 class="text-muted">Total Bookings</h6>
+                    <h3>{{ total_bookings }}</h3>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0 p-3 h-100">
-                <h6 class="text-muted">Total Revenue</h6>
-                <h3>₹{{ total_revenue|floatformat:2 }}</h3>
+            <div class="col-md-3">
+                <div class="card shadow border-0 p-3 h-100">
+                    <h6 class="text-muted">Successful Payments</h6>
+                    <h3>{{ total_payments }}</h3>
+                </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-danger text-white shadow">
-                <div class="card-body">
-                    <h5>Cancelled Bookings</h5>
-                    <h2>{{ total_cancelled }}</h2>
+
+            <div class="col-md-3">
+                <div class="card shadow border-0 p-3 h-100">
+                    <h6 class="text-muted">Total Revenue</h6>
+                    <h3>₹{{ total_revenue|floatformat:2 }}</h3>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Recent Bookings -->
-    <div class="card shadow-sm border-0 mt-4">
+    <br>
+    <!-- cancellation here -->
+    <div class="card shadow border-0 p-4 h-100">
         <div class="card-body">
-            <h4 class="fw-bold mb-3">Recent Bookings</h4>
-
-            <div class="table-responsive">
+            <h4 class="fw-bold mb-3">Bookings Cancelled</h4>
+            <div class="table-responsive" style="height: 200px; overflow-y: scroll; overflow-x: auto;">
                 <table class="table table-hover align-middle">
                     <thead class="table-danger">
                         <tr>
                             <th>Booking ID</th>
-                            <th>Customer</th>
-                            <th>Bus</th>
+                            <th>Customer Name</th>
+                            <th>Bus Name</th>
                             <th>Amount</th>
-                            <th>Status</th>
+                            <th>Current Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for booking in recent_cancelled %}
+                        <tr>
+                            <td>{{ booking.booking_id }}</td>
+                            <td>{{ booking.user.get_full_name|default:booking.user.username }}</td>
+                            <td>{{ booking.schedule.bus.bus_name }}</td>
+                            <td>₹{{ booking.total_amount|floatformat:2 }}</td>
+                            <td>
+                                <span class="badge bg-danger">Cancelled</span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                No cancelled bookings found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+    <!-- total revenue -->
+    <div class="card shadow border-0 p-4 mb-4">
+        <h4 class="fw-bold mb-3">My Total Revenue</h4>
+        <h2 class="text-success mb-0">
+            ₹{{ total_revenue|floatformat:2 }}
+        </h2>
+    </div>
+    <br>
+    <!-- Recent Bookings -->
+    <div class="card shadow border-0 p-4 h-100">
+        <div class="card-body">
+            <h4 class="fw-bold mb-3">Recent Bookings</h4>
+            <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                <table class="table table-hover align-middle">
+                    <thead class="table-danger" style="position: sticky; top: 0; z-index: 2;">
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer Name</th>
+                            <th>Bus Name</th>
+                            <th>Amount</th>
+                            <th>Current Status</th>
                         </tr>
                     </thead>
 
@@ -77,7 +116,8 @@ Bus Operator Dashboard
                         {% for booking in recent_bookings %}
                         <tr>
                             <td>{{ booking.booking_id }}</td>
-                            <td>{{ booking.user.username }}</td>
+                            <!-- <td>{{ booking.user.username }}</td> -->
+                            <td>{{ booking.user.first_name }} {{ booking.user.last_name }}</td>
                             <td>{{ booking.schedule.bus.bus_name }}</td>
                             <td>₹{{ booking.total_amount|floatformat:2 }}</td>
                             <td>
@@ -102,67 +142,71 @@ Bus Operator Dashboard
             </div>
         </div>
     </div>
-
-    <div class="row g-4 mt-4">
-        <!-- Buses -->
-        <div class="col-md-4">
-            <a href="{% url 'bus_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>🚌 Buses</h4>
-                    <p class="text-muted mb-0">Manage buses</p>
-                    <span class="btn btn-danger">View Bus</span>
-                </div>
-            </a>
-        </div>
-        <!-- Routes -->
-        <div class="col-md-4">
-            <a href="{% url 'route_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>🛣️ Routes</h4>
-                    <p class="text-muted mb-0">Manage routes</p>
-                    <span class="btn btn-danger">View Routes</span>
-                </div>
-            </a>
-        </div>
-        <!-- Schedules -->
-        <div class="col-md-4">
-            <a href="{% url 'schedule_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>📅 Schedules</h4>
-                    <p class="text-muted mb-0">Manage schedules</p>
-                    <span class="btn btn-danger">View Schedule</span>
-                </div>
-            </a>
-        </div>
-        <!-- Seats -->
-        <div class="col-md-4">
-            <a href="{% url 'seat_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>💺 Seats</h4>
-                    <p class="text-muted mb-0">Manage seats</p>
-                    <span class="btn btn-danger">View Seats</span>
-                </div>
-            </a>
-        </div>
-        <!-- Bookings -->
-        <div class="col-md-4">
-            <a href="{% url 'booking_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>📋 Bookings</h4>
-                    <p class="text-muted mb-0">View bookings</p>
-                    <span class="btn btn-danger">View Booking</span>
-                </div>
-            </a>
-        </div>
-        <!-- Payments -->
-        <div class="col-md-4">
-            <a href="{% url 'payment_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>💳 Payments</h4>
-                    <p class="text-muted mb-0">View payments</p>
-                    <span class="btn btn-danger">View Payment</span>
-                </div>
-            </a>
+    <br>
+    <!-- All services is here  -->
+    <div class="card shadow border-0 p-4 h-100">
+        <h4 class="fw-bold mb-3">Operator Manage The All..</h4>
+        <div class="row g-3">
+            <!-- Buses -->
+            <div class="col-md-4">
+                <a href="{% url 'bus_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>🚌 Buses</h4>
+                        <p class="text-muted mb-0">Manage buses</p>
+                        <span class="btn btn-danger">View Bus</span>
+                    </div>
+                </a>
+            </div>
+            <!-- Routes -->
+            <div class="col-md-4">
+                <a href="{% url 'route_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>🛣️ Routes</h4>
+                        <p class="text-muted mb-0">Manage routes</p>
+                        <span class="btn btn-danger">View Routes</span>
+                    </div>
+                </a>
+            </div>
+            <!-- Schedules -->
+            <div class="col-md-4">
+                <a href="{% url 'schedule_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>📅 Schedules</h4>
+                        <p class="text-muted mb-0">Manage schedules</p>
+                        <span class="btn btn-danger">View Schedule</span>
+                    </div>
+                </a>
+            </div>
+            <!-- Seats -->
+            <div class="col-md-4">
+                <a href="{% url 'seat_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>💺 Seats</h4>
+                        <p class="text-muted mb-0">Manage seats</p>
+                        <span class="btn btn-danger">View Seats</span>
+                    </div>
+                </a>
+            </div>
+            <!-- Bookings -->
+            <div class="col-md-4">
+                <a href="{% url 'booking_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>📋 Bookings</h4>
+                        <p class="text-muted mb-0">View bookings</p>
+                        <span class="btn btn-danger">View Booking</span>
+                    </div>
+                </a>
+            </div>
+            <!-- Payments -->
+            <div class="col-md-4">
+                <a href="{% url 'payment_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>💳 Payments</h4>
+                        <p class="text-muted mb-0">View payments</p>
+                        <span class="btn btn-danger">View Payment</span>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </div>

@@ -12,152 +12,189 @@
         <!-- Summary Cards -->
         <div class="row g-3 mb-4">
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card shadow-sm border-0 h-100 p-3">
+                <div class="card shadow border-0 h-100 p-3">
                     <h6 class="text-muted">Total Users</h6>
                     <h3>{{ total_users }}</h3>
                 </div>
             </div>
 
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card shadow-sm border-0 h-100 p-3">
+                <div class="card shadow border-0 h-100 p-3">
                     <h6 class="text-muted">Total Buses</h6>
                     <h3>{{ total_buses }}</h3>
                 </div>
             </div>
 
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card shadow-sm border-0 h-100 p-3">
+                <div class="card shadow border-0 h-100 p-3">
                     <h6 class="text-muted">Total Bookings</h6>
                     <h3>{{ total_bookings }}</h3>
                 </div>
             </div>
 
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card shadow-sm border-0 h-100 p-3">
+                <div class="card shadow border-0 h-100 p-3">
                     <h6 class="text-muted">Successful Payments</h6>
                     <h3>{{ total_payments }}</h3>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-danger text-white shadow">
-                <div class="card-body">
-                    <h5>Cancelled Bookings</h5>
-                    <h2>{{ total_cancelled }}</h2>
-                </div>
-            </div>
-        </div>
-
     </div>
+    <br>
+    <!-- cancellation here -->
+    <div class="card shadow border-0 p-4 mt-4">
+        <h4 class="fw-bold mb-3">Bookings Cancelled</h4>
+        <div class="table-responsive" style="height: 200px; overflow-y: scroll; overflow-x: auto;">
+            <table class="table table-hover align-middle">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Customer Name</th>
+                        <th>Bus Name</th>
+                        <th>Amount</th>
+                        <th>Current Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in recent_cancelled %}
+                    <tr>
+                        <td>{{ booking.booking_id }}</td>
+                        <td>{{ booking.user.get_full_name|default:booking.user.username }}</td>
+                        <td>{{ booking.schedule.bus.bus_name }}</td>
+                        <td>₹{{ booking.total_amount|floatformat:2 }}</td>
+                        <td>
+                            <span class="badge bg-danger">Cancelled</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            No cancelled bookings found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
     <!-- Total Revenue Separate Card -->
     <div class="card shadow border-0 p-4 mb-4">
         <h4 class="fw-bold mb-3">Total Revenue</h4>
         <h2 class="text-success mb-0">₹{{ total_revenue }}</h2>
     </div>
+    <br>
     <!-- Recent Bookings Separate Card -->
-    <div class="card shadow border-0 mb-4">
+    <div class="card shadow border-0 p-4 h-100">
+        <div class="card-body">
+            <h4 class="fw-bold mb-3">Recent Bookings</h4>
+            <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                <table class="table table-hover align-middle">
+                    <thead class="table-danger" style="position: sticky; top: 0; z-index: 2;">
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer Name</th>
+                            <th>Bus Name</th>
+                            <th>Amount</th>
+                            <th>Current Status</th>
+                        </tr>
+                    </thead>
 
-        <div class="card-header bg-white p-4">
-            <h4 class="fw-bold mb-0">Recent Bookings</h4>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-
-                <thead class="table-light">
-                    <tr>
-                        <th>Booking ID</th>
-                        <th>Customer</th>
-                        <th>Bus</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for booking in recent_bookings %}
-                    <tr>
-                        <td>{{ booking.booking_id }}</td>
-                        <td>{{ booking.user.username }}</td>
-                        <td>{{ booking.schedule.bus.bus_name }}</td>
-                        <td>₹{{ booking.total_amount }}</td>
-                        <td>{{ booking.get_status_display }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center py-3">
-                            No bookings found.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-
-            </table>
+                    <tbody>
+                        {% for booking in recent_bookings %}
+                        <tr>
+                            <td>{{ booking.booking_id }}</td>
+                            <td>{{ booking.user.get_full_name|default:booking.user.username }}</td>
+                            <td>{{ booking.schedule.bus.bus_name }}</td>
+                            <td>₹{{ booking.total_amount|floatformat:2 }}</td>
+                            <td>
+                                {% if booking.status == 'CONFIRMED' %}
+                                <span class="badge bg-success">Confirmed</span>
+                                {% elif booking.status == 'PENDING' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                                {% elif booking.status == 'CANCELLED' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                No bookings found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <br>
     <!-- manage  the buses and every thing -->
-    <div class="row g-4">
-        <div class="col-md-4">
-            <a href="{% url 'bus_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>🚌 Buses</h4>
-                    <p class="text-muted mb-3">Manage buses</p>
-                    <span class="btn btn-danger">View Buses</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-md-4">
-            <a href="{% url 'route_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>🛣️ Routes</h4>
-                    <p class="text-muted mb-3">Manage routes</p>
-                    <span class="btn btn-danger">View Routes</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-md-4">
-            <a href="{% url 'schedule_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>📅 Schedules</h4>
-                    <p class="text-muted mb-3">Manage schedules</p>
-                    <span class="btn btn-danger">View Schedules</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-md-4">
-            <a href="{% url 'seat_list' %}" class="text-decoration-none text-dark">
-                <div class="card shadow border-0 p-4 h-100">
-                    <h4>💺 Seats</h4>
-                    <p class="text-muted mb-3">Manage seats</p>
-                    <span class="btn btn-danger">View Seats</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow border-0 p-4">
-                <h4>📋 Bookings</h4>
-                <p class="text-muted mb-3">Manage bookings</p>
-                <a href="{% url 'booking_list' %}" class="btn btn-danger">
-                    View Bookings
+    <div class="card shadow border-0 p-4 h-100">
+        <h4 class="fw-bold mb-3">Admin Manage The All..</h4>
+        <div class="row g-3">
+            <!-- Buses -->
+            <div class="col-md-4">
+                <a href="{% url 'bus_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>🚌 Buses</h4>
+                        <p class="text-muted mb-3">Manage buses</p>
+                        <span class="btn btn-danger">View Buses</span>
+                    </div>
                 </a>
             </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow border-0 p-4">
-                <h4>💳 Payments</h4>
-                <p class="text-muted mb-3">Manage payments</p>
-                <a href="{% url 'payment_list' %}" class="btn btn-success">
-                    View Payments
+            <!-- Routes -->
+            <div class="col-md-4">
+                <a href="{% url 'route_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>🛣️ Routes</h4>
+                        <p class="text-muted mb-3">Manage routes</p>
+                        <span class="btn btn-danger">View Routes</span>
+                    </div>
                 </a>
             </div>
+            <!-- Schedules -->
+            <div class="col-md-4">
+                <a href="{% url 'schedule_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>📅 Schedules</h4>
+                        <p class="text-muted mb-3">Manage schedules</p>
+                        <span class="btn btn-danger">View Schedules</span>
+                    </div>
+                </a>
+            </div>
+            <!-- Seats -->
+            <div class="col-md-4">
+                <a href="{% url 'seat_list' %}" class="text-decoration-none text-dark">
+                    <div class="card shadow border-0 p-4 h-100">
+                        <h4>💺 Seats</h4>
+                        <p class="text-muted mb-3">Manage seats</p>
+                        <span class="btn btn-danger">View Seats</span>
+                    </div>
+                </a>
+            </div>
+            <!-- Bookings -->
+            <div class="col-md-4">
+                <div class="card shadow border-0 p-4">
+                    <h4>📋 Bookings</h4>
+                    <p class="text-muted mb-3">Manage bookings</p>
+                    <a href="{% url 'booking_list' %}" class="btn btn-danger">
+                        View Bookings
+                    </a>
+                </div>
+            </div>
+            <!-- Payments -->
+            <div class="col-md-4">
+                <div class="card shadow border-0 p-4">
+                    <h4>💳 Payments</h4>
+                    <p class="text-muted mb-3">Manage payments</p>
+                    <a href="{% url 'payment_list' %}" class="btn btn-success">
+                        View Payments
+                    </a>
+                </div>
+            </div>
         </div>
-
     </div>
 
     <!-- optional -->

@@ -56,20 +56,6 @@ def user_logout(request):
     logout(request)
     return redirect('home')
 
-# @login_required
-# def dashboard(request):
-#     # Django superuser
-#     if request.user.is_superuser:
-#         return render(request, 'accounts/admin_dashboard.html')
-#     account = request.user.account
-
-#     if account.role == 'ADMIN':
-#         return render(request, 'accounts/admin_dashboard.html')
-#     elif account.role == 'BUS_OPERATOR':
-#         return render(request, 'accounts/operator_dashboard.html')
-#     else:
-#         return render(request, 'accounts/customer_dasboard.html')
-
 @login_required
 def dashboard(request):
     if request.user.is_superuser:
@@ -106,6 +92,9 @@ def admin_dashboard(request):
     recent_bookings = Booking.objects.order_by('-id')[:10]
     total_cancelled = Booking.objects.filter(
     status='CANCELLED').count()
+    recent_cancelled = Booking.objects.filter(
+        status='CANCELLED').select_related(
+        'user', 'schedule__bus').order_by('-booked_at')[:10]
 
     context = {
         'total_users': total_users,
@@ -115,6 +104,8 @@ def admin_dashboard(request):
         'total_revenue': total_revenue,
         'recent_bookings': recent_bookings,
         'total_cancelled': total_cancelled,
+        'recent_cancelled': recent_cancelled,
+
     }
 
     return render(request, 'accounts/admin_dashboard.html', context)
@@ -148,7 +139,9 @@ def operator_dashboard(request):
     )['total'] or 0
     total_cancelled = operator_bookings.filter(
     status='CANCELLED').count()
-
+    recent_cancelled = Booking.objects.filter(
+    status='CANCELLED').select_related(
+    'user', 'schedule__bus').order_by('-booked_at')[:10]
     context = {
         'total_buses': total_buses,
         'total_bookings': total_bookings,
@@ -156,6 +149,7 @@ def operator_dashboard(request):
         'total_revenue': total_revenue,
         'recent_bookings': operator_bookings[:10],
         'total_cancelled': total_cancelled,
+        'recent_cancelled': recent_cancelled,
     }
 
     return render(

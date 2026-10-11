@@ -13,12 +13,18 @@
 </head>
 
 <!-- <body class="bg-light"> -->
+
 <body class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{% url 'home' %}">
-                RedBus
+                Bus Booking System
+                {% if user.is_authenticated %}
+                <span class="badge bg-warning text-dark ms-2">
+                    {{ user.account.get_role_display }}
+                </span>
+                {% endif %}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
                 <span class="navbar-toggler-icon"></span>
