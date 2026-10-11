@@ -31,8 +31,6 @@ A full-stack Bus Booking Web Application developed using Python and Django, insp
 ## Project Structure
 
 ```text
-## Project Structure
-
 LOGIN / REGISTER
        |
        v
@@ -105,49 +103,44 @@ DASHBOARDS
 
 ## Installation and Setup
 
-**1. Clone the repository**
 
-```bash
-git clone https://github.com/azadhussain92/Django-Bus-Booking-System.git
-```
-
-**2. Open the project folder**
+**1. Open the project folder**
 
 ```bash
 cd Django-Bus-Booking-System
 ```
 
-**3. Create a virtual environment**
+**2. Create a virtual environment**
 
 ```bash
 python -m venv venv
 ```
 
-**4. Activate the virtual environment (Windows)**
+**3. Activate the virtual environment (Windows)**
 
 ```bash
 venv\Scripts\activate
 ```
 
-**5. Install dependencies**
+**4. Install dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**6. Apply migrations**
+**5. Apply migrations**
 
 ```bash
 python manage.py migrate
 ```
 
-**7. Create an admin account**
+**6. Create an admin account**
 
 ```bash
 python manage.py createsuperuser
 ```
 
-**8. Run the development server**
+**7. Run the development server**
 
 ```bash
 python manage.py runserver
@@ -196,13 +189,3 @@ Cancel Booking (if eligible)
 - Email and SMS booking notifications
 - PDF ticket generation
 - Advanced booking reports and analytics
-
-## Author
-
-**Azad Hussain**
-
-GitHub: [@azadhussain92](https://github.com/azadhussain92)
-
----
-
-*This project was developed for learning and demonstrating full-stack web development with Django.*
