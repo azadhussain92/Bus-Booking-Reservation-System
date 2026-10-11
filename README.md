@@ -131,6 +131,7 @@ pip install -r requirements.txt
 **5. Apply migrations**
 
 ```bash
+python manage.py makemigrations
 python manage.py migrate
 ```
 
@@ -147,6 +148,22 @@ python manage.py runserver
 ```
 
 Open `http://127.0.0.1:8000/` in your browser.
+### 🗄️ Database Setup
+
+This project uses MySQL as its database.
+
+1. Install MySQL Server.
+2. Create a database in MySQL.
+3. Update the database credentials in `settings.py`.
+4. Run the following commands:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+
+**Note:** The database itself is not included in this repository. Tables are created using Django migrations.
 
 ## User Roles
 
