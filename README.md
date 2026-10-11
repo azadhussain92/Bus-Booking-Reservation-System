@@ -26,7 +26,7 @@ A full-stack Bus Booking Web Application developed using Python and Django, insp
 - CSS3
 - JavaScript
 - Bootstrap
-- SQLite / MySQL
+-  MySQL
 
 ## Project Structure
 
