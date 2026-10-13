@@ -103,7 +103,7 @@ DASHBOARDS
 
 ## Project Architecture
 
-![Bus Booking System Architecture](docs/bus-booking-diagram.png)
+![Bus Booking System Architecture](docs\Bus Booking System Workflow Infographic.png)
 ## Installation and Setup
 
 
