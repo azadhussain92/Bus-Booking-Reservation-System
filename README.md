@@ -100,6 +100,10 @@ DASHBOARDS
           ├── Cancelled Bookings
           └── My Tickets
 ```
+
+## Project Architecture
+
+![Bus Booking System Architecture](docs/bus-booking-diagram.png)
 ## Installation and Setup
 
 
