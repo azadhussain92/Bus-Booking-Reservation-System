@@ -104,6 +104,97 @@ LOGIN / REGISTER
        ├── Total Payments
        └── Total Revenue
 ```
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+<h3 align="center">Bus Booking Workflow</h3>
+
+<pre>
+LOGIN / REGISTER
+       |
+       v
+   DASHBOARD
+       |
+       v
+ BUS BOOKING SYSTEM
+       |
+       +-------------------+
+       |                   |
+       v                   v
+     BUSES              ACCOUNTS
+       |                   |
+       ├─ Bus Details      ├─ Customer
+       ├─ Bus Routes       ├─ Bus Operator
+       ├─ Bus Schedules    └─ Admin
+       └─ Seat Details
+              |
+              v
+         SEARCH BUSES
+              |
+              v
+         SELECT SEATS
+              |
+              v
+      PASSENGER DETAILS
+              |
+              v
+           BOOKING
+              |
+              ├─ Booking ID
+              ├─ Booking Status
+              └─ Cancellation
+              |
+              v
+           PAYMENT
+              |
+              ├─ Payment Success
+              ├─ Payment Failed
+              └─ Payment Status
+              |
+              v
+            TICKET
+              |
+              ├─ Ticket Details
+              └─ Download Ticket (PDF)
+</pre>
+
+</td>
+<td width="50%" valign="top">
+
+<h3 align="center">Dashboards</h3>
+
+<pre>
+       DASHBOARDS
+            |
+      +-----+-----+
+      |     |     |
+      v     v     v
+    ADMIN OPERATOR CUSTOMER
+      |     |     |
+      |     |     ├─ Search Buses
+      |     |     ├─ My Bookings
+      |     |     ├─ Cancelled Bookings
+      |     |     └─ My Tickets
+      |     |
+      |     ├─ My Buses
+      |     ├─ Total Bookings
+      |     ├─ Cancelled Bookings
+      |     └─ Revenue
+      |
+      ├─ Total Users
+      ├─ Total Buses
+      ├─ Total Bookings
+      ├─ Cancelled Bookings
+      ├─ Total Payments
+      └─ Total Revenue
+</pre>
+
+</td>
+</tr>
+</table>
+
 ## Installation and Setup
 
 
