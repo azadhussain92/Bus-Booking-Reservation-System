@@ -100,7 +100,6 @@ DASHBOARDS
           ├── Cancelled Bookings
           └── My Tickets
 ```
-
 ## Installation and Setup
 
 
