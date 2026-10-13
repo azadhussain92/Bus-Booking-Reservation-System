@@ -30,14 +30,14 @@ A full-stack Bus Booking Web Application developed using Python and Django, insp
 
 ## Project Structure
 
-```text
-LOGIN / REGISTER
+```text                                                                                    
+LOGIN / REGISTER                                                               
        |
        v
-   DASHBOARD
+    DASHBOARD
        |
        v
- BUS BOOKING SYSTEM
+  BUS BOOKING SYSTEM
        |
        +------------------------+
        |                        |
@@ -50,10 +50,10 @@ LOGIN / REGISTER
        └── Seat Details
               |
               v
-        SEARCH BUSES
+         SEARCH BUSES
               |
               v
-        SELECT SEATS
+         SELECT SEATS
               |
               v
       PASSENGER DETAILS
@@ -76,29 +76,33 @@ LOGIN / REGISTER
             TICKET
               |
               ├── Ticket Details
-              └── Download Ticket
+              └── Download Ticket (PDF)
 
-DASHBOARDS
-    |
-    ├── Admin Dashboard
-    │     ├── Total Users
-    │     ├── Total Buses
-    │     ├── Total Bookings
-    │     ├── Cancelled Bookings
-    │     ├── Total Payments
-    │     └── Total Revenue
-    |
-    ├── Bus Operator Dashboard
-    │     ├── My Buses
-    │     ├── Total Bookings
-    │     ├── Cancelled Bookings
-    │     └── Revenue
-    |
-    └── Customer Dashboard
-          ├── Search Buses
-          ├── My Bookings
-          ├── Cancelled Bookings
-          └── My Tickets
+
+          DASHBOARDS
+              |
+       +------+------+
+       |      |      |
+       v      v      v
+
+     ADMIN  OPERATOR CUSTOMER
+       |      |      |
+       |      |      ├── Search Buses
+       |      |      ├── My Bookings
+       |      |      ├── Cancelled Bookings
+       |      |      └── My Tickets
+       |      |
+       |      ├── My Buses
+       |      ├── Total Bookings
+       |      ├── Cancelled Bookings
+       |      └── Revenue
+       |
+       ├── Total Users
+       ├── Total Buses
+       ├── Total Bookings
+       ├── Cancelled Bookings
+       ├── Total Payments
+       └── Total Revenue
 ```
 ## Installation and Setup
 
